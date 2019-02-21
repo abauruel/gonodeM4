@@ -18,11 +18,11 @@ class ForgotPasswordController {
         {
           email,
           token: user.token,
-          link: `${request.input('redirect_url')}?token`
+          link: `${request.input('redirect_url')}?{{token}}}`
         },
         message => {
           message
-            .to(user.mail)
+            .to(user.email)
             .from('abauruel@gmail.com', 'Alex Dev')
             .subject('Recuperação de senha')
         }
