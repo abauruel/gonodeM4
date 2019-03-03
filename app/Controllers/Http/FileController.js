@@ -3,13 +3,6 @@
 const File = use('App/Models/File')
 const Helpers = use('Helpers')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with files
- */
 class FileController {
   async show ({ params, response }) {
     const file = await File.findOrFail(params.id)

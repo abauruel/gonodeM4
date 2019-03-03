@@ -5,7 +5,7 @@ const Schema = use('Schema')
 
 class FileSchema extends Schema {
   up () {
-    this.create('files', (table) => {
+    this.create('files', table => {
       table.increments()
       table.string('file').notNullable()
       table.string('name').notNullable()
