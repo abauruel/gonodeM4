@@ -1,7 +1,8 @@
 'use strict'
 
-const File = use('app/Models/File')
+const File = use('App/Models/File')
 const Helpers = use('Helpers')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -10,15 +11,12 @@ const Helpers = use('Helpers')
  * Resourceful controller for interacting with files
  */
 class FileController {
-  /**
-   * Show a list of all files.
-   * GET files
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
+  async show ({ params, response }) {
+    const file = await File.findOrFail(params.id)
+
+    return response.download(Helpers.tmpPath(`uploads/${file.file}`))
+  }
+
   async store ({ request, response }) {
     try {
       if (!request.file('file')) return
@@ -40,9 +38,12 @@ class FileController {
         type: upload.type,
         subtype: upload.subtype
       })
-    } catch (error) {
 
-      return response.
+      return file
+    } catch (error) {
+      return response
+        .status(error.status)
+        .send({ error: { message: 'Erro no upload do arquivo ' } })
     }
   }
 }
