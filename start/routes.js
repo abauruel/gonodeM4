@@ -2,17 +2,25 @@
 
 const Route = use('Route')
 
-Route.post('user', 'UserController.store')
-Route.post('session', 'SessionController.store')
+Route.post('user', 'UserController.store').validator('User')
+Route.post('session', 'SessionController.store').validator('Session')
 
-Route.post('passwords', 'ForgotPasswordController.store')
-Route.put('passwords', 'ForgotPasswordController.update')
+Route.post('passwords', 'ForgotPasswordController.store').validator(
+  'ForgotPassword'
+)
+Route.put('passwords', 'ForgotPasswordController.update').validator(
+  'ResetPassword'
+)
 
 Route.get('files/:id', 'fileController.show')
 
 Route.group(() => {
-  Route.get('files/:id', 'fileController.show')
-  Route.resource('projects', 'ProjectController').apiOnly()
+  Route.post('files', 'fileController.store')
+  Route.resource('projects', 'ProjectController')
+    .apiOnly()
+    .validator(new Map([[['projects.store'], ['Project']]]))
 
-  Route.resource('projects.tasks', 'TaskController').apiOnly()
+  Route.resource('projects.tasks', 'TaskController')
+    .apiOnly()
+    .validator(new Map([[['projects.tasks.store'], ['Task']]]))
 }).middleware(['auth'])
